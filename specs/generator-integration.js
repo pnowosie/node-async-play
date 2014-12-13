@@ -11,6 +11,7 @@ describe ('Genrator base object', function() {
       var g = new Generator(5, 0, 10);
 
       g.should.be.type('object');
+      g.should.be.an.instanceOf(Generator);
       g.should.have.property('current', 5).of.type('number');
       g.should.have.property('next').of.type('function');
 
@@ -21,7 +22,7 @@ describe ('Genrator base object', function() {
       var g;
       try {
          g = new Generator();
-         should.not.exist(g);
+         should.not.exist(g); // should fail if object is created
       } catch (e) {
          e.should.have.property('message', 'Lower and Upper bounds have to be numbers');
       }
@@ -44,11 +45,11 @@ describe ('Simple count down generator', function() {
 
       while (++i < expected.length) {
 
-         expected[i].should.be.equal(counter.current);
+         expected[i].should.equal(counter.current);
 
          var hasNext = counter.next();
          //console.log(i, 'current:', counter.current, 'has next:', hasNext);
-         (expected[i] > 0).should.be.equal(hasNext);
+         (expected[i] > 0).should.equal(hasNext);
 
       }
    });

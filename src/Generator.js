@@ -1,19 +1,16 @@
-var isNumber = function(value) {
-    return isFinite(value) && !isNaN(parseInt(value));
-};
+var _ = require('lodash');
 
 var Generator = module.exports = function Generator(seed, lower, upper) {
-    if (!(isNumber(lower) && isNumber(upper)))
+    if (!(_.isNumber(lower) && _.isNumber(upper)))
         throw new Error('Lower and Upper bounds have to be numbers');
 
-    var self = this;
     var validate = function(value) {
-        value = isNumber(value) ? Number(value) : NaN;
+        value = _.isNumber(value) ? Number(value) : NaN;
         return lower <= value && value <= upper;
     };
 
     if (validate(seed))
-        self.current = Number(seed);
+        this.current = Number(seed);
 };
 
 Generator.prototype.next = function() {
