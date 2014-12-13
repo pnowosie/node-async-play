@@ -1,0 +1,20 @@
+{
+  "name": "node-async-play",
+  "version": "1.0.0",
+  "description": "Node asynchronous code play",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pnowosie/node-async-play.git"
+  },
+  "author": "Pawel Nowosielski",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-mocha": "^2.0.0",
+    "mocha": "^2.0.1",
+    "should": "^4.3.0"
+  }
+}
