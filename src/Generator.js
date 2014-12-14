@@ -13,17 +13,17 @@ var Generator = module.exports = function Generator(seed, lower, upper) {
         this.current = Number(seed);
 };
 
-Generator.prototype.next = function() {
-    var canGenerate = !this._isStopCondMet();
+Generator.prototype.next = function(/*[optional]*/value) {
+    var canGenerate = !this._isStopCondMet(value);
     if (canGenerate)
-        this._generateNext();
+        this._generateNext(value);
     return canGenerate;
 };
 
-Generator.prototype._isStopCondMet = function() {
+Generator.prototype._isStopCondMet = function(value) {
     return true;
 };
 
-Generator.prototype._generateNext = function() {
+Generator.prototype._generateNext = function(value) {
     // do nothing
 };

@@ -4,6 +4,7 @@ describe ('Genrator base object', function() {
    var Generator = require('../src/Generator');
 
    it ('should be defined', function() {
+      should.exist(Generator);
       Generator.should.be.type('function');
    });
 
