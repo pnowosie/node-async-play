@@ -7,7 +7,7 @@ module.exports.Play = function(inputDir, outputDir, Generator) {
     fs.exists(outputDir, function(exists) {
         if (exists) throw new Error('Output directory already exists!');
 
-        fs.mkdir(outputDir, function(err){
+        fs.mkdir(outputDir, function(err) {
             if (err) throw err;
 
             var processed = {},
