@@ -13,7 +13,7 @@ var FsMock = module.exports = function FsMock(inFiles, closeFun) {
 
 
 FsMock.prototype.watch = function(dir, next) {
-    var watchIdx = 0, self = this;
+    var watchIdx = 0, dryRunCnt = 0, self = this;
     this.stopWatch = false;
 
     process.nextTick(waitForFiles);
@@ -29,16 +29,19 @@ FsMock.prototype.watch = function(dir, next) {
     function waitForFiles() {
         console.log('File waiter, stop:', self.stopWatch, 'events in queue:', self.watchEvnts.length);
 
+        if (watchIdx == self.watchEvnts.length) ++dryRunCnt;
+
         while (watchIdx < self.watchEvnts.length) {
             var fn = self.watchEvnts[watchIdx];
-            process.nextTick(function() {
-                next('rename', fn);
-            });
+            next('rename', fn);
             ++watchIdx;
         }
 
+        if (dryRunCnt > 5)
+            throw new Error('Mock watcher stop by too many dry runs!');
         if (!self.stopWatch)
             process.nextTick(waitForFiles);
+
     }
 };
 
