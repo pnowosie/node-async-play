@@ -4,7 +4,7 @@
   "description": "Node asynchronous code play",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\""
+    "test": "mocha specs --reporter dot"
   },
   "repository": {
     "type": "git",

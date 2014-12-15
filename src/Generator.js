@@ -14,7 +14,7 @@ var Generator = module.exports = function Generator(seed, lower, upper) {
 };
 
 Generator.prototype.next = function(/*[optional]*/value) {
-    var canGenerate = !this._isStopCondMet(value);
+    var canGenerate = !(isNaN(this.current) || this._isStopCondMet(value));
     if (canGenerate)
         this._generateNext(value);
     return canGenerate;

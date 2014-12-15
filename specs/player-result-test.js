@@ -53,7 +53,7 @@ describe ('Result manager', function() {
         bobScore.trim().should.equal("bob 2");
     });
 
-    it ('should return undefined as score for unknown user', function() {
+    it ('should return undefined score for unknown user', function() {
         should.not.exist(rm.getScore('unknown'));
     });
 });

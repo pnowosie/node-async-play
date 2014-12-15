@@ -54,4 +54,10 @@ describe ('Simple count down generator', function() {
 
       }
    });
+
+   it ('should check bounds', function() {
+      new CDGenerator(25).next().should.be.false;
+
+      new CDGenerator(-1).next().should.be.false;
+   });
 });

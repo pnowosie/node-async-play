@@ -9,6 +9,7 @@ gulp.task('greetings', function() {
 gulp.task('test', function() {
     return gulp.src('specs/**/*.js', {read: false})
         .pipe(mocha({reporter: 'spec'}));
+    // mocha reporters: spec dot landing nyan, more: mocha --reporters
 });
 
 //gulp.watch(['specs/**/*.js'], function(events) {
