@@ -3,8 +3,12 @@ var _ = require('lodash');
 
 var EOL = require('os').EOL;
 
-var ResultManager = module.exports = function ResultManager(Generator) {
+var ResultManager = module.exports = function ResultManager(InputFiles, Generator) {
     if (typeof Generator !== 'function') throw new Error('ResultManager needs Generator constructor to work.');
+
+    var playersCnt  = _.filter(InputFiles, function(fn) {
+        return '.0' === fn.substring(fn.length - 2);
+    }).length;
 
     var results = {};
 
@@ -29,6 +33,7 @@ var ResultManager = module.exports = function ResultManager(Generator) {
     };
 
     this.isGameOver = function() {
-        return _.all(results, { end: true});
+        var donePlayersCnt = _.countBy(_.values(results), 'end')['true'];
+        return playersCnt === donePlayersCnt;
     };
 };

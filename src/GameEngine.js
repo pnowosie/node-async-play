@@ -11,8 +11,7 @@ module.exports.Play = function(inputDir, outputDir, Generator) {
             if (err) throw err;
 
             var processed = {},
-                dm = new DirMngr(outputDir),
-                rm = new ResultManager(Generator);
+                dm = new DirMngr(outputDir);
 
             var fsw = fs.watch(outputDir, function(evt, fn) {
                 if (fn != null && evt === 'rename' && !processed[fn]) {
@@ -50,7 +49,15 @@ module.exports.Play = function(inputDir, outputDir, Generator) {
                 }
             });
 
-            fs.copy(inputDir, outputDir);
+            var rm;
+            fs.readdir(inputDir, function(err, files) {
+                if (err) throw err;
+
+                rm = new ResultManager(files, Generator);
+                fs.copy(inputDir, outputDir, function (err) {
+                    if (err) throw err;
+                });
+            });
 
         });
     });

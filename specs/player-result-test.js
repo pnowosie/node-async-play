@@ -10,13 +10,13 @@ describe ('Result manager', function() {
         should.exist(ResMngr);
         ResMngr.should.be.type('function');
 
-        var rm = new ResMngr(CDGen);
+        var rm = new ResMngr([], CDGen);
         rm.should.be.instanceOf(ResMngr);
         rm.should.have.property('isGameOver').of.type('function');
         rm.isGameOver().should.be.type('boolean');
     });
 
-    var rm = new ResMngr(CDGen), player = 'bob';
+    var rm = new ResMngr(['bob.0'], CDGen), player = 'bob';
     it ('should register player on first call', function() {
         var res = rm.nextResult(player, 2);
 

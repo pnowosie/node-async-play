@@ -44,17 +44,21 @@ FsMock.prototype.watch = function(dir, next) {
     }
 };
 
-FsMock.prototype.readFile = function(fn, encoding, next) {
-    if (this.outputDir[fn])
-        return next(null, this.outputDir[fn]);
-    next(new Error('File not found: '+ fn));
+FsMock.prototype.readdir = function(inputDir, next) {
+    next(null, _.keys(this.inFiles));
 };
 
 FsMock.prototype.copy = function(inputDir, outputDir, next) {
     _.extend(this.outputDir, this.inFiles);
     this.watchEvnts =
         this.inFiles.__order__ || _.map(_.keys(this.inFiles), path.basename);
+    if (next) next();
+};
 
+FsMock.prototype.readFile = function(fn, encoding, next) {
+    if (this.outputDir[fn])
+        return next(null, this.outputDir[fn]);
+    next(new Error('File not found: '+ fn));
 };
 
 FsMock.prototype.writeFile = function(fn, data, next) {
