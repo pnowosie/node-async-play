@@ -7,7 +7,7 @@ var FsMock = module.exports = function FsMock(inFiles, closeFun) {
     //TODO: Reset state
     this.fsw_close = closeFun || function(){};
     this.inFiles = inFiles;
-    this.outFiles = {};
+    this.outputDir = {};
     this.watchEvnts = [];
 };
 
@@ -18,7 +18,6 @@ FsMock.prototype.watch = function(dir, next) {
 
     process.nextTick(waitForFiles);
 
-    next('rename', 'filename'); //TODO
     return {
         close: function() {
             self.stopWatch = true;
@@ -27,7 +26,7 @@ FsMock.prototype.watch = function(dir, next) {
     };
 
     function waitForFiles() {
-        console.log('File waiter, stop:', self.stopWatch, 'events in queue:', self.watchEvnts.length);
+        console.log('File watcher, stop:', self.stopWatch, 'events in queue:', self.watchEvnts.length);
 
         if (watchIdx == self.watchEvnts.length) ++dryRunCnt;
 
@@ -46,26 +45,28 @@ FsMock.prototype.watch = function(dir, next) {
 };
 
 FsMock.prototype.readFile = function(fn, encoding, next) {
-    if (this.outFiles[fn])
-        return next(null, this.outFiles[fn]);
+    if (this.outputDir[fn])
+        return next(null, this.outputDir[fn]);
     next(new Error('File not found: '+ fn));
 };
 
 FsMock.prototype.copy = function(inputDir, outputDir, next) {
-    _.extend(this.outFiles, this.inFiles);
-    this.watchEvnts = _.map(_.keys(this.inFiles), path.basename);
+    _.extend(this.outputDir, this.inFiles);
+    this.watchEvnts =
+        this.inFiles.__order__ || _.map(_.keys(this.inFiles), path.basename);
+
 };
 
 FsMock.prototype.writeFile = function(fn, data, next) {
-    if (!this.outFiles[fn])
+    if (!this.outputDir[fn])
         this.watchEvnts.push(path.basename(fn));
-    this.outFiles[fn] = data;
+    this.outputDir[fn] = data;
     next();
 };
 
 FsMock.prototype.appendFile = function(fn, data, next) {
-    if (!this.outFiles[fn]) this.outFiles[fn] = '';
-    this.outFiles[fn] += data;
+    if (!this.outputDir[fn]) this.outputDir[fn] = '';
+    this.outputDir[fn] += data;
     next();
 };
 
