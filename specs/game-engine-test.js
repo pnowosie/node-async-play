@@ -1,4 +1,5 @@
 var should = require('should');
+var path = require('path');
 var rewire = require('rewire');
 var CountDownGenerator = require('../src/CountDownGenerator');
 
@@ -18,9 +19,9 @@ describe ('Game Engine', function() {
     describe ('One player', function() {
         var fs;
         before ('Initialization', function() {
-            var input = {
-                't1\\ala.0': '2'
-            };
+            var input = {};
+            input[path.join('t1', 'ala.0')] = '2';
+         
             fs = new FsMock(input);
             GameEngine.__set__('fs', fs);
         });
@@ -39,17 +40,18 @@ describe ('Game Engine', function() {
         it ('Creates few files for player', function() {
             var dir = fs.outputDir;
 
-            dir.should.have.property('t1\\ala.0', '2');
-            dir.should.have.property('t1\\ala.1', '1');
-            dir.should.have.property('t1\\ala.2', '0');
-            dir.should.not.have.property('t1\\ala.3');
+            dir.should.have.property(path.join('t1', 'ala.0'), '2');
+            dir.should.have.property(path.join('t1', 'ala.1'), '1');
+            dir.should.have.property(path.join('t1', 'ala.2'), '0');
+            dir.should.not.have.property(path.join('t1', 'ala.3'));
         });
 
         it ('Creates file with game result', function() {
             var dir = fs.outputDir,
-                res = dir['t1\\game.txt'];
+                gamefile = path.join('t1', 'game.txt'),
+                res = dir[gamefile];
 
-            dir.should.have.property('t1\\game.txt');
+            dir.should.have.property(gamefile);
             res.should.match(/^ala 2 /);
         });
     });
@@ -57,9 +59,8 @@ describe ('Game Engine', function() {
     describe ('Dumb player provide start value out of range', function() {
         var fs;
         before ('Initialization', function() {
-            var input = {
-                't2\\bob.0': '-1'
-            };
+            var input = {};
+            input[path.join('t2', 'bob.0')] = '-1';
             fs = new FsMock(input);
             GameEngine.__set__('fs', fs);
         });
@@ -78,15 +79,16 @@ describe ('Game Engine', function() {
         it ('and contains invalid value provided by a player', function() {
             var dir = fs.outputDir;
 
-            dir.should.have.property('t2\\bob.0', '-1');
-            dir.should.not.have.property('t2\\bob.1');
+            dir.should.have.property(path.join('t2', 'bob.0'), '-1');
+            dir.should.not.have.property(path.join('t2', 'bob.1'));
         });
 
         it ('Creates file with game result', function() {
             var dir = fs.outputDir,
-                res = dir['t2\\game.txt'];
+                gamefile = path.join('t2', 'game.txt'),
+                res = dir[gamefile];
 
-            dir.should.have.property('t2\\game.txt');
+            dir.should.have.property(gamefile);
             res.should.match(/^bob 0 /);
         });
     });
@@ -94,11 +96,11 @@ describe ('Game Engine', function() {
     describe ('Full game test', function() {
         var fs;
         before ('Initialization', function() {
-            var input = {
-                't3\\ala.0' : '2',
-                't3\\bob.0' : '1',
-                't3\\cleo.0': '0'
-            };
+            var input = {};
+            input[path.join('t3', 'ala.0')] = '2';
+            input[path.join('t3', 'bob.0')] = '1';
+            input[path.join('t3', 'cleo.0')]= '0';
+            
             fs = new FsMock(input);
             GameEngine.__set__('fs', fs);
         });
@@ -121,9 +123,10 @@ describe ('Game Engine', function() {
 
         it ('Creates file with game result', function() {
             var dir = fs.outputDir,
-                res = dir['t3\\game.txt'];
+                gamefile = path.join('t3', 'game.txt'),
+                res = dir[gamefile];
 
-            dir.should.have.property('t3\\game.txt');
+            dir.should.have.property(gamefile);
             res.should.match(/ala 2 /);
             res.should.match(/bob 1 /);
             res.should.match(/cleo 0 /);
@@ -133,13 +136,13 @@ describe ('Game Engine', function() {
     describe ('Full game - specified input files order', function() {
         var fs;
         before ('Initialization', function() {
-            var input = {
-                't4\\ala.0' : '2',
-                't4\\bob.0' : '1',
-                't4\\cleo.0': '0',
-
+            var input = {            
                 __order__: ['cleo.0', 'bob.0', 'ala.0']
             };
+            input[path.join('t4', 'ala.0')] = '2';
+            input[path.join('t4', 'bob.0')] = '1';
+            input[path.join('t4', 'cleo.0')]= '0';
+
             fs = new FsMock(input);
             GameEngine.__set__('fs', fs);
         });
@@ -162,9 +165,10 @@ describe ('Game Engine', function() {
 
         it ('Creates file with game result', function() {
             var dir = fs.outputDir,
-                res = dir['t4\\game.txt'];
+                gamefile = path.join('t4', 'game.txt'),
+                res = dir[gamefile];
 
-            dir.should.have.property('t4\\game.txt');
+            dir.should.have.property(gamefile);
             res.should.match(/ala 2 /);
             res.should.match(/bob 1 /);
             res.should.match(/cleo 0 /);
